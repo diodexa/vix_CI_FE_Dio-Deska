@@ -40,7 +40,7 @@ onMounted(async () => {
 </template>
 
 <style>
-    .container {
+    /* .container {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -89,9 +89,10 @@ onMounted(async () => {
     }
     .card-title {
         font-size: 1.7vw;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;  
+         display: -webkit-box;
         -webkit-box-orient: vertical;
+        line-clamp: 2;          
+        -webkit-line-clamp: 2; 
         overflow: hidden;
         margin: 0;
         line-height: 1.2; 
@@ -123,7 +124,7 @@ onMounted(async () => {
     .card:hover {
         transform: scale(1.1);
         z-index: 2;
-    }
+    } */
 
 
 </style>

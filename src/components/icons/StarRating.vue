@@ -6,16 +6,13 @@
             type: Number,
             required: true
         },
-        max: {
-            type: Number,
-            default: 5
-        }
+        
     })
 
     const stars = computed(() => {
         const full = Math.floor(props.rating)
         const half = props.rating - full >= 0.5
-        const empty = props.max - full - (half ? 1 : 0)
+        const empty = 5 - full - (half ? 1 : 0)
 
         return {
             full,
