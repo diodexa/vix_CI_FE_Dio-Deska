@@ -1,39 +1,86 @@
 <script setup>
+
     import { computed } from 'vue'
 
     const props = defineProps({
+
         rating: {
             type: Number,
             required: true
         },
-        
+        max: {
+            type: Number,
+            default: 5
+        },
+        color: {
+            type: String,
+            default: '#0a2a66'
+        },
     })
 
-    const stars = computed(() => {
-        const full = Math.floor(props.rating)
-        const half = props.rating - full >= 0.5
-        const empty = 5 - full - (half ? 1 : 0)
+    const dots = computed(() => {
+    const full = Math.floor(props.rating)
+    const half = props.rating - full >= 0.5
+    const empty = props.max - full - (half ? 1 : 0)
 
-        return {
-            full,
-            half,
-            empty
-        }
+    return { full, half, empty }
     })
 </script>
 
-<template>
 
-    <div class="stars">
-        <i v-for="n in stars.full" :key="'f'+n" class="fa-solid fa-star"></i>
-        <i v-if="stars.half" class="fa-solid fa-star-half-stroke"></i>
-        <i v-for="n in stars.empty" :key="'e'+n" class="fa-regular fa-star"></i>
+<template>
+    <div class="dots">
+        <!-- full -->
+        <span
+        v-for="n in dots.full"
+        :key="'f' + n"
+        class="dot filled"
+        ></span>
+
+        <!-- half -->
+        <span
+        v-if="dots.half"
+        class="dot half"
+        ></span>
+
+        <!-- empty -->
+        <span
+        v-for="n in dots.empty"
+        :key="'e' + n"
+        class="dot"
+        ></span>
     </div>
 </template>
 
+
 <style scoped>
-    .stars {
-        color: #f5b50a;
-        font-size: 1rem;
+    .dots {
+        --dot-color: #000000;
+        display: flex;
+        gap: 2px;
+       align-items: center;
     }
+
+    .dot {
+        width: 1vw;
+        height: 1vw;
+        border-radius: 50%;
+        border: 1px solid var(--dot-color);
+        background: #e5e7eb00;
+    }
+
+        /* full */
+    .dot.filled {
+        background: var(--dot-color);
+    }
+
+        /* half */
+    .dot.half {
+        background: linear-gradient(
+            to right,
+            var(--dot-color) 50%,
+            #e5e7eb00 50%
+        );
+    }
+
 </style>
