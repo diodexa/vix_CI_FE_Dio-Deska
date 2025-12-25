@@ -1,7 +1,8 @@
 <template>
     <div v-if="loading">Loading...</div>
 
-    <div v-else-if="products" class="container">
+    <div v-else-if="products" class="container" :class="themeClass">
+        <div class="patern"></div>
         <div class="wrapper card space-between">
 
             <div class="containerImage">
@@ -10,15 +11,15 @@
 
             <div class="flex-col">
 
-                <div>
-                    <h3>{{ products.title }}</h3>
+                <div class="header">
+                    <h2>{{ products.title }}</h2>
     
                     <div class="wrapper space-between border-bottom">
                         <span>{{ products.category }}</span>
                         
                         <div class="wrapper">
                             <span>{{ products.rating.rate }}/5</span>
-                            <StarRating :rating="products.rating.rate"/>
+                            <StarRating :rating="products.rating.rate" />
                         </div>
                     </div>
                 </div>
@@ -26,7 +27,7 @@
                 <p class="description">{{ products.description }}</p>
                 
                 <div class="bottom">
-                    <h3 class="price">${{ products.price }}</h3>
+                    <h2 class="price">${{ products.price }}</h2>
                     
                     <div class="buttons">
                         <button> Buy Now!</button>
@@ -41,7 +42,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { getProduct } from '../API/APIProduct';
 import { useRoute } from 'vue-router';
 import StarRating from '../components/icons/StarRating.vue';
@@ -78,6 +79,17 @@ import StarRating from '../components/icons/StarRating.vue';
         }
     )
 
+    const themeClass = computed(()=>{
+        if (!products.value) return ''
+
+        const category = products.value.category.toLowerCase()
+
+        if (category.includes("women's")) return 'theme-women'
+        if (category.includes(`men's`)) return 'theme-men'
+
+        return 'theme-default'
+    })
+
     
 </script>
 
@@ -86,21 +98,35 @@ import StarRating from '../components/icons/StarRating.vue';
     .container {
         --defaultBG:#dcdcdc;
         --antiDefaultColor:#ffff;
-        --defaultColor:#1E1E1E;
+        --defaultColor:#1E1E1E;  
 
-        --menBG:#D6E6FF;
-        --menColor:#002772;
-        
-        --womenBG:#FDE2FF;
-        --womenColor:#720060;    
+        --patternColor: #dcdcdc92;
 
         height: 100vh; 
         display: flex;
         justify-content: center;
         align-items: center;
-        background: linear-gradient(
+        position: relative;
+        background: 
+        linear-gradient(
             to bottom, var(--defaultBG) 0%, var(--defaultBG) 60%, white 60%, white 100%
-        )
+            );
+
+        }
+
+    .patern {
+        position: absolute;
+        inset: 0;
+        height: 60%;
+        z-index: 0;
+        pointer-events: none;
+
+        background-image:
+            radial-gradient(circle at 10% 30%, var(--patternColor) 1px, transparent 17px),
+            radial-gradient(circle at 90% 70%, var(--patternColor) 1px, transparent 15px);
+
+        background-size: 300px 100px;
+        background-repeat: repeat;
     }
     .flex-col{
         display: flex;
@@ -144,9 +170,10 @@ import StarRating from '../components/icons/StarRating.vue';
         object-fit: contain;
     }
 
-    .card h3{
+    .card h2{
         color: var(--defaultColor);
     }
+    
 
     .space-between {
         justify-content: space-between;
@@ -187,9 +214,18 @@ import StarRating from '../components/icons/StarRating.vue';
         margin-top: auto;
     }
 
+    .container.theme-men {
+        --defaultBG:#D6E6FF;
+        --antiDefaultColor:#ffff;
+        --defaultColor:#002772;
+    }
+    .container.theme-women {
+        --defaultBG:#FDE2FF;
+        --antiDefaultColor:#ffff;
+        --defaultColor:#720060;
+    }
  
-
-
+ 
     
 
 </style>

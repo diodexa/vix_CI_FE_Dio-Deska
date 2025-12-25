@@ -12,10 +12,7 @@
             type: Number,
             default: 5
         },
-        color: {
-            type: String,
-            default: '#0a2a66'
-        },
+      
     })
 
     const dots = computed(() => {
@@ -54,8 +51,13 @@
 
 
 <style scoped>
+
+    .star.active {
+        color: var(--defaultColor); 
+    }
+
     .dots {
-        --dot-color: #000000;
+        --dot-color: var(--defaultColor);
         display: flex;
         gap: 2px;
        align-items: center;
