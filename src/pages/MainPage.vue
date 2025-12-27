@@ -1,17 +1,29 @@
 <template>
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading" class="container">
+        <div class="wrapper card space-between skeleton">
+            
+            <div class="flex-col">
+                <div>
+                    <div class="sk-img"></div>
+                </div>
+            </div>
+            <div class="flex-col">
+                <div>
+                    <div class="sk-text"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div v-else-if="products" class="container" :class="themeClass">
-        <div class="patern"></div>
+        <div class="bg-pattern"></div>
         <div class="wrapper card space-between">
 
             <div class="containerImage">
                 <img :src="products.image" :alt="products.title" />
             </div>
-
             <div class="flex-col">
-
-                <div class="header">
+                <div>
                     <h2>{{ products.title }}</h2>
     
                     <div class="wrapper space-between border-bottom">
@@ -31,7 +43,7 @@
                     
                     <div class="buttons">
                         <button> Buy Now!</button>
-                        <button> Next Product</button>
+                        <button @click="nextProduct"> Next Product</button>
                     </div>
                 </div>
 
@@ -44,11 +56,12 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
 import { getProduct } from '../API/APIProduct';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import StarRating from '../components/icons/StarRating.vue';
 
 
     const route =useRoute()
+    const router=useRouter()
 
     const products = ref(null)
     const loading = ref(true)
@@ -56,10 +69,14 @@ import StarRating from '../components/icons/StarRating.vue';
 
     async function fetchProduct(id) {
         loading.value = true
+        const MAX_ID = 20
+         if (id < 1 || id > MAX_ID) {
+            router.replace('/not-found')
+            return
+        }
         try {
             const data = await getProduct(id)
             products.value = data[id-1]
-            console.log('API RESULT:', data)
         }
         catch (e) {
             console.error(e)
@@ -90,6 +107,13 @@ import StarRating from '../components/icons/StarRating.vue';
         return 'theme-default'
     })
 
+    function nextProduct () {
+        const currentId = Number(route.params.id)
+        const maxId = 20
+        const nextId = currentId >= maxId? 1 : (currentId+1)
+        router.push(`/${nextId}`)
+    }
+
     
 </script>
 
@@ -114,20 +138,19 @@ import StarRating from '../components/icons/StarRating.vue';
 
         }
 
-    .patern {
+
+    .bg-pattern{
         position: absolute;
         inset: 0;
         height: 60%;
-        z-index: 0;
-        pointer-events: none;
-
-        background-image:
-            radial-gradient(circle at 10% 30%, var(--patternColor) 1px, transparent 17px),
-            radial-gradient(circle at 90% 70%, var(--patternColor) 1px, transparent 15px);
-
-        background-size: 300px 100px;
+        background-image: url('/bg-pattern.svg');
         background-repeat: repeat;
+        background-size: cover;
+        pointer-events: none;
+        z-index: 0;
     }
+
+
     .flex-col{
         display: flex;
         flex-direction: column;
@@ -135,7 +158,7 @@ import StarRating from '../components/icons/StarRating.vue';
     .wrapper {
         display: flex;
         flex-direction: row;
-        gap: 5px;
+        
     }
 
     .card {
@@ -148,7 +171,7 @@ import StarRating from '../components/icons/StarRating.vue';
         background-color: white;
         padding: 1rem;
         position: relative;
-        
+        z-index: 1;
     }
 
 
@@ -210,6 +233,15 @@ import StarRating from '../components/icons/StarRating.vue';
         color: var(--antiDefaultColor);
     }
 
+    .buttons button:nth-child(1):hover {
+        color: var(--defaultColor);
+        background: var(--antiDefaultColor);
+    }
+    .buttons button:nth-child(2):hover {
+        background: var(--defaultColor);
+        color: var(--antiDefaultColor);
+    }
+
     .bottom{
         margin-top: auto;
     }
@@ -224,8 +256,36 @@ import StarRating from '../components/icons/StarRating.vue';
         --antiDefaultColor:#ffff;
         --defaultColor:#720060;
     }
+
+    .skeleton {
+        pointer-events: none;
+    }
+
+    .skeleton div {
+        background: #e5e7eb;
+        border-radius: 4px;
+        animation: shimmer 1.2s infinite ease-in-out;
+    }
+
+    /* image */
+    .sk-img {
+        width: 22rem;
+        height: 100%;
+    }
+
+    /* title */
+    .sk-text {
+        width: 30rem;
  
- 
+    }
+
+
+    /* shimmer */
+    @keyframes shimmer {
+        0% { opacity: .4 }
+        50% { opacity: 1 }
+        100% { opacity: .4 }
+    }
     
 
 </style>
