@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import MainPage from '../pages/MainPage.vue'
 import NotFound from '../pages/NotFound.vue'
-// import HomePages from '@/pages/homePages.vue'
+
 
 
 
