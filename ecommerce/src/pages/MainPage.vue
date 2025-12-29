@@ -158,7 +158,7 @@ import StarRating from '../components/icons/StarRating.vue';
     .wrapper {
         display: flex;
         flex-direction: row;
-        
+        gap: 10px;
     }
 
     .card {
@@ -176,15 +176,14 @@ import StarRating from '../components/icons/StarRating.vue';
 
 
     .containerImage {
-        min-width: 20dvw;   
+        min-width: 20vw;   
+        max-height: 60vh;
+        height: auto;
         display: flex;
         margin: 5rem;
         align-items: center;       
         justify-content: center;   
         overflow: hidden;
-        aspect-ratio: 1 / 1;
-        max-height: 60vh;
-        height: auto;
     }
 
     .containerImage img {

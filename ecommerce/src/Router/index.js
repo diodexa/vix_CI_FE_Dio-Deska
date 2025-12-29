@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import MainPage from '../pages/MainPage.vue'
 import NotFound from '../pages/NotFound.vue'
 // import HomePages from '@/pages/homePages.vue'
@@ -6,10 +6,10 @@ import NotFound from '../pages/NotFound.vue'
 
 
 const routes = [
-    // {
-    //     path: '/',
-    //     component: HomePages
-    // },
+    {
+        path: '/',
+        redirect: '/1'
+    },
     {
         path: '/:id(\\d+)',
         name: 'Product',
@@ -28,8 +28,8 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
+  history: createWebHashHistory(),
+  routes
 })
 
 export default router
